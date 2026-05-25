@@ -1,0 +1,476 @@
+:root {
+  --rose: #f5b6c8;
+  --rose-deep: #e88aa6;
+  --blush: #f9d4de;
+  --lavender: #d9b8f0;
+  --lav-deep: #b785e0;
+  --gold: #f5d189;
+  --ink: #FFF5F8;
+  --ink-soft: rgba(255, 245, 248, 0.82);
+  --ink-faint: rgba(255, 238, 245, 0.55);
+  --glass: rgba(255, 255, 255, 0.10);
+  --glass-bd: rgba(255, 255, 255, 0.22);
+  --emo-shadow: 0 2px 22px rgba(245, 182, 200, 0.40), 0 1px 2px rgba(70, 18, 46, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(160deg, #250a36 0%, #3a0f33 45%, #4a1230 78%, #3a0e2c 100%);
+  color: var(--ink);
+}
+
+body {
+  position: fixed;
+  inset: 0;
+}
+
+#stars,
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+#stars {
+  z-index: 1;
+}
+
+#bokeh {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#brighten {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 38%, rgba(255, 225, 240, 0.16) 0%, transparent 60%);
+}
+
+#particles {
+  z-index: 4;
+}
+
+#petalsLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bokeh {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(14px);
+  opacity: 0;
+  will-change: transform, opacity;
+  background: radial-gradient(circle, rgba(245, 182, 200, 0.5) 0%, rgba(183, 133, 224, 0.18) 45%, transparent 70%);
+  animation: bokehDrift linear infinite;
+}
+
+@keyframes bokehDrift {
+  0% {
+    transform: translateY(20px) scale(0.9);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 0.55;
+  }
+
+  85% {
+    opacity: 0.45;
+  }
+
+  100% {
+    transform: translateY(-120px) scale(1.15);
+    opacity: 0;
+  }
+}
+
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.5rem, 6vw, 3rem);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scene.active {
+  pointer-events: auto;
+}
+
+#sf {
+  justify-content: flex-start;
+  padding-top: 7vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.font-d {
+  font-family: 'Dancing Script', cursive;
+}
+
+.font-p {
+  font-family: 'Poppins', sans-serif;
+}
+
+.t-dream {
+  background: linear-gradient(135deg, #f9d4de 0%, #d9b8f0 50%, #f5d189 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 2px 14px rgba(245, 182, 200, 0.25));
+}
+
+.emo-line,
+.letter-line {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--ink);
+  -webkit-text-fill-color: var(--ink);
+  text-shadow: var(--emo-shadow);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.letter-line {
+  font-style: italic;
+}
+
+.t-soft {
+  color: var(--ink-soft);
+}
+
+.t-faint {
+  color: var(--ink-faint);
+}
+
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid var(--glass-bd);
+  border-radius: 28px;
+  box-shadow: 0 10px 40px rgba(60, 15, 45, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.btn-glow {
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.09em;
+  color: var(--ink);
+  padding: 0.85rem 2.4rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(245, 182, 200, 0.30), rgba(183, 133, 224, 0.30));
+  border: 1.5px solid rgba(255, 255, 255, 0.34);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  user-select: none;
+  transition: transform .3s cubic-bezier(.2, .8, .2, 1), background .35s, box-shadow .35s;
+  animation: btnPulse 2.6s ease-in-out infinite;
+}
+
+.btn-glow:hover,
+.btn-glow:active {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, rgba(245, 182, 200, 0.5), rgba(183, 133, 224, 0.5));
+}
+
+@keyframes btnPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 18px rgba(245, 182, 200, 0.35), 0 0 44px rgba(183, 133, 224, 0.18);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(245, 182, 200, 0.6), 0 0 72px rgba(183, 133, 224, 0.4);
+  }
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--rose);
+  margin-left: 3px;
+  vertical-align: middle;
+  border-radius: 1px;
+  animation: blink .85s step-end infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1
+  }
+
+  50% {
+    opacity: 0
+  }
+}
+
+@keyframes floatY {
+
+  0%,
+  100% {
+    transform: translateY(0)
+  }
+
+  50% {
+    transform: translateY(-9px)
+  }
+}
+
+@keyframes breathe {
+
+  0%,
+  100% {
+    transform: scale(1)
+  }
+
+  50% {
+    transform: scale(1.035)
+  }
+}
+
+@keyframes glowPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: .55
+  }
+
+  50% {
+    transform: scale(1.14);
+    opacity: .95
+  }
+}
+
+.fl-float {
+  animation: floatY 6s ease-in-out infinite;
+}
+
+.fl-breathe {
+  animation: breathe 4.5s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.fl-svg {
+  overflow: visible;
+  filter: drop-shadow(0 6px 16px rgba(40, 10, 30, 0.35));
+  display: block;
+}
+
+#hint {
+  position: absolute;
+  left: 50%;
+  bottom: 34%;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  animation: hintPulse 3s ease-in-out infinite;
+}
+
+#hint.show {
+  opacity: 0.72;
+}
+
+@keyframes hintPulse {
+
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    text-shadow: 0 0 10px rgba(245, 182, 200, 0.3);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.045);
+    text-shadow: 0 0 22px rgba(245, 182, 200, 0.6);
+  }
+}
+
+.petal-em {
+  position: fixed;
+  pointer-events: none;
+  will-change: transform, opacity;
+  opacity: 0;
+  top: 0;
+  left: 0;
+}
+
+.butterfly {
+  position: fixed;
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0;
+  animation: bfloat 9s ease-in-out infinite;
+}
+
+@keyframes bfloat {
+  0% {
+    transform: translate(0, 0) rotate(-6deg)
+  }
+
+  25% {
+    transform: translate(34px, -22px) rotate(6deg)
+  }
+
+  50% {
+    transform: translate(-12px, -40px) rotate(-4deg)
+  }
+
+  75% {
+    transform: translate(22px, -18px) rotate(5deg)
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(-6deg)
+  }
+}
+
+.ripple {
+  position: fixed;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(245, 182, 200, 0.55);
+  pointer-events: none;
+  z-index: 15;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.hburst {
+  position: fixed;
+  pointer-events: none;
+  z-index: 42;
+  opacity: 0;
+}
+
+#cursor {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  background: radial-gradient(circle, rgba(245, 182, 200, 0.9), rgba(183, 133, 224, 0.4));
+  box-shadow: 0 0 16px rgba(245, 182, 200, 0.7);
+}
+
+@media (hover:hover) and (pointer:fine) {
+  #cursor {
+    display: block;
+  }
+}
+
+#music-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 120;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.15rem;
+  line-height: 1;
+  background: var(--glass);
+  border: 1px solid var(--glass-bd);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 6px 20px rgba(60, 15, 45, 0.4);
+  cursor: pointer;
+  color: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(.85);
+  transition: opacity .6s ease, transform .35s cubic-bezier(.2, .8, .2, 1);
+}
+
+#music-toggle.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+#music-toggle:hover {
+  transform: scale(1.08);
+}
+
+#blurLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#finalMsg {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  text-align: center;
+  padding: 2rem;
+}
+
+#blackout {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: #0a0410;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#remainFlower {
+  position: fixed;
+  inset: 0;
+  z-index: 62;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.rline {
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}

@@ -1,901 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-<title>A Little Gift For You 🌸</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>A Little Gift For You 🌸</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:ital,wght@0,200;0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Dancing+Script:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap"
+        rel="stylesheet" />
 
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-  /* ════════════════════════════════════════════════════════════
-     DESIGN TOKENS
-     ════════════════════════════════════════════════════════════ */
-  :root{
-    --rose:        #f5b6c8;
-    --rose-deep:   #e88aa6;
-    --blush:       #f9d4de;
-    --lavender:    #d9b8f0;
-    --lav-deep:    #b785e0;
-    --gold:        #f5d189;
-    --cream:       #fff6ef;
-    --ink:         rgba(255,228,238,0.92);
-    --ink-soft:    rgba(255,214,228,0.7);
-    --ink-faint:   rgba(255,206,224,0.45);
-    --glass:       rgba(255,255,255,0.10);
-    --glass-bd:    rgba(255,255,255,0.22);
-  }
-
-  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-
-  html,body{
-    width:100%; height:100%;
-    overflow:hidden;
-    font-family:'Poppins',sans-serif;
-    /* Deep purple → dark rose */
-    background:linear-gradient(160deg,#250a36 0%, #3a0f33 45%, #4a1230 78%, #3a0e2c 100%);
-    color:var(--ink);
-  }
-  body{ position:fixed; inset:0; }
-
-  /* ── Layer stack ──────────────────────────────────────────── */
-  #stars, #particles { position:fixed; inset:0; pointer-events:none; }
-  #stars     { z-index:1; }
-  #bokeh     { position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
-  #particles { z-index:4; }
-  #brighten  { position:fixed; inset:0; z-index:3; pointer-events:none; opacity:0;
-               background:radial-gradient(ellipse at 50% 38%, rgba(255,225,240,0.16) 0%, transparent 60%); }
-  #petalsLayer { position:fixed; inset:0; z-index:5; pointer-events:none; overflow:hidden; }
-
-  /* ── Bokeh glowing circles ────────────────────────────────── */
-  .bokeh{
-    position:absolute; border-radius:50%; filter:blur(14px);
-    opacity:0; will-change:transform,opacity;
-    background:radial-gradient(circle, rgba(245,182,200,0.5) 0%, rgba(183,133,224,0.18) 45%, transparent 70%);
-    animation:bokehDrift linear infinite;
-  }
-  @keyframes bokehDrift{
-    0%   { transform:translateY(20px) scale(0.9); opacity:0; }
-    15%  { opacity:0.55; }
-    85%  { opacity:0.45; }
-    100% { transform:translateY(-120px) scale(1.15); opacity:0; }
-  }
-
-  /* ════════════════════════════════════════════════════════════
-     SCENES
-     ════════════════════════════════════════════════════════════ */
-  .scene{
-    position:fixed; inset:0; z-index:10;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:clamp(1.5rem,6vw,3rem);
-    opacity:0; pointer-events:none;
-  }
-  .scene.active{ pointer-events:auto; }
-
-  .font-d{ font-family:'Dancing Script',cursive; }
-  .font-p{ font-family:'Poppins',sans-serif; }
-
-  .t-dream{
-    background:linear-gradient(135deg,#f9d4de 0%, #d9b8f0 50%, #f5d189 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    filter:drop-shadow(0 2px 14px rgba(245,182,200,0.25));
-  }
-  .t-soft { color:var(--ink-soft); }
-  .t-faint{ color:var(--ink-faint); }
-
-  /* ── Glass panel ──────────────────────────────────────────── */
-  .glass{
-    background:var(--glass);
-    backdrop-filter:blur(20px) saturate(150%);
-    -webkit-backdrop-filter:blur(20px) saturate(150%);
-    border:1px solid var(--glass-bd);
-    border-radius:28px;
-    box-shadow:0 10px 40px rgba(60,15,45,0.4), inset 0 1px 0 rgba(255,255,255,0.12);
-  }
-
-  /* ════════════════════════════════════════════════════════════
-     GLOWING BUTTON
-     ════════════════════════════════════════════════════════════ */
-  .btn-glow{
-    position:relative;
-    font-family:'Poppins',sans-serif; font-size:0.95rem; font-weight:400;
-    letter-spacing:0.09em;
-    color:var(--ink);
-    padding:0.85rem 2.4rem; border-radius:999px;
-    background:linear-gradient(135deg, rgba(245,182,200,0.30), rgba(183,133,224,0.30));
-    border:1.5px solid rgba(255,255,255,0.34);
-    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-    cursor:pointer; user-select:none;
-    transition:transform .3s cubic-bezier(.2,.8,.2,1), background .35s, box-shadow .35s;
-    animation:btnPulse 2.6s ease-in-out infinite;
-  }
-  .btn-glow:hover, .btn-glow:active{
-    transform:scale(1.05);
-    background:linear-gradient(135deg, rgba(245,182,200,0.5), rgba(183,133,224,0.5));
-  }
-  @keyframes btnPulse{
-    0%,100%{ box-shadow:0 0 18px rgba(245,182,200,0.35), 0 0 44px rgba(183,133,224,0.18); }
-    50%    { box-shadow:0 0 30px rgba(245,182,200,0.6), 0 0 72px rgba(183,133,224,0.4); }
-  }
-
-  /* ── Typing caret ─────────────────────────────────────────── */
-  .caret{
-    display:inline-block; width:2px; height:1em;
-    background:var(--rose); margin-left:3px; vertical-align:middle;
-    border-radius:1px; animation:blink .85s step-end infinite;
-  }
-  @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:0} }
-
-  /* ── Flower idle motion (nested layers) ───────────────────── */
-  @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
-  @keyframes breathe{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.035)} }
-  @keyframes glowPulse{ 0%,100%{transform:scale(1);opacity:.55} 50%{transform:scale(1.14);opacity:.95} }
-  .fl-float  { animation:floatY 6s ease-in-out infinite; }
-  .fl-breathe{ animation:breathe 4.5s ease-in-out infinite; transform-origin:center center; }
-  .fl-svg    { overflow:visible; filter:drop-shadow(0 6px 16px rgba(40,10,30,0.35)); display:block; }
-
-  /* ── Touch hint ───────────────────────────────────────────── */
-  #hint{
-    position:absolute; left:50%; bottom:34%; transform:translateX(-50%);
-    white-space:nowrap; animation:hintPulse 3s ease-in-out infinite;
-  }
-  @keyframes hintPulse{
-    0%,100%{ opacity:.5;  transform:translateX(-50%) scale(1); }
-    50%    { opacity:.95; transform:translateX(-50%) scale(1.04); }
-  }
-
-  /* ── Falling / rising petals ──────────────────────────────── */
-  .petal-em{ position:fixed; pointer-events:none; will-change:transform,opacity; opacity:0; top:0; left:0; }
-
-  /* ── Butterflies ──────────────────────────────────────────── */
-  .butterfly{ position:fixed; pointer-events:none; z-index:6; opacity:0;
-              animation:bfloat 9s ease-in-out infinite; }
-  @keyframes bfloat{
-    0%{ transform:translate(0,0) rotate(-6deg) } 25%{ transform:translate(34px,-22px) rotate(6deg) }
-    50%{ transform:translate(-12px,-40px) rotate(-4deg) } 75%{ transform:translate(22px,-18px) rotate(5deg) }
-    100%{ transform:translate(0,0) rotate(-6deg) }
-  }
-
-  /* ── Ripple ───────────────────────────────────────────────── */
-  .ripple{ position:fixed; width:46px; height:46px; border-radius:50%;
-           border:1.5px solid rgba(245,182,200,0.55); pointer-events:none; z-index:15;
-           transform:translate(-50%,-50%) scale(0); }
-
-  /* ── Heart burst ──────────────────────────────────────────── */
-  .hburst{ position:fixed; pointer-events:none; z-index:42; opacity:0; }
-
-  /* ── Cursor glow (desktop fine-pointer only) ──────────────── */
-  #cursor{ position:fixed; z-index:9999; pointer-events:none; width:14px; height:14px;
-           border-radius:50%; transform:translate(-50%,-50%); display:none;
-           background:radial-gradient(circle, rgba(245,182,200,0.9), rgba(183,133,224,0.4));
-           box-shadow:0 0 16px rgba(245,182,200,0.7); }
-  @media (hover:hover) and (pointer:fine){ #cursor{ display:block; } }
-
-  /* ── Finale overlays ──────────────────────────────────────── */
-  #blurLayer{ position:fixed; inset:0; z-index:30; pointer-events:none; opacity:0;
-              backdrop-filter:blur(0px); -webkit-backdrop-filter:blur(0px); }
-  #finalMsg{ position:fixed; inset:0; z-index:65; display:flex; align-items:center; justify-content:center;
-             pointer-events:none; opacity:0; text-align:center; padding:2rem; }
-  #blackout{ position:fixed; inset:0; z-index:60; background:#0a0410; opacity:0; pointer-events:none; }
-  #remainFlower{ position:fixed; inset:0; z-index:62; display:flex; align-items:center; justify-content:center;
-                 pointer-events:none; opacity:0; }
-
-  /* line reveal helper */
-  .rline{ opacity:0; will-change:transform,opacity,filter; }
-</style>
+    <link rel="stylesheet" href="./css/style.css" />
 </head>
+
 <body>
 
-<!-- ── Background layers ── -->
-<canvas id="stars"></canvas>
-<div id="bokeh"></div>
-<div id="brighten"></div>
-<canvas id="particles"></canvas>
-<div id="petalsLayer"></div>
-<div id="cursor"></div>
+    <canvas id="stars"></canvas>
+    <div id="bokeh"></div>
+    <div id="brighten"></div>
+    <canvas id="particles"></canvas>
+    <div id="petalsLayer"></div>
+    <div id="cursor"></div>
 
-<!-- ════════════════════════════════════════════════════════════
-     SCENE 1
-     ════════════════════════════════════════════════════════════ -->
-<section id="s1" class="scene active">
-  <p id="hint" class="font-d t-faint" style="font-size:1.55rem; letter-spacing:.05em;">Touch anywhere...</p>
+    <button id="music-toggle" aria-label="Toggle music">🔈</button>
 
-  <!-- Flower (positioning → bloom-scale → float → breathe → svg) -->
-  <div id="f1-pos" style="opacity:0; position:relative;">
-    <div id="f1-glow" style="position:absolute; inset:-18% -18% -2% -18%; border-radius:50%;
+    <section id="s1" class="scene active">
+        <p id="hint" class="font-d t-faint" style="font-size:1.55rem; letter-spacing:.05em;">Touch anywhere...</p>
+
+        <div id="f1-pos" style="opacity:0; position:relative;">
+            <div id="f1-glow" style="position:absolute; inset:-18% -18% -2% -18%; border-radius:50%;
          background:radial-gradient(circle at 50% 42%, rgba(245,182,200,0.5) 0%, rgba(183,133,224,0.22) 45%, transparent 70%);
-         animation:glowPulse 4s ease-in-out infinite; opacity:0;"></div>
-    <div id="f1-scale">
-      <div class="fl-float"><div class="fl-breathe">
-        <svg id="f1-svg" class="fl-svg" viewBox="-120 -130 240 300" width="220" height="275"
-             style="max-width:74vw;">
-          <defs>
-            <radialGradient id="petalA" cx="50%" cy="22%" r="78%">
-              <stop offset="0%"  stop-color="#fff2f6"/>
-              <stop offset="42%" stop-color="#f7c1d4"/>
-              <stop offset="100%" stop-color="#e07ba0"/>
-            </radialGradient>
-            <radialGradient id="petalB" cx="50%" cy="22%" r="78%">
-              <stop offset="0%"  stop-color="#fdeafb"/>
-              <stop offset="45%" stop-color="#e9b7f0"/>
-              <stop offset="100%" stop-color="#c07fda"/>
-            </radialGradient>
-            <radialGradient id="goldA" cx="42%" cy="38%" r="70%">
-              <stop offset="0%" stop-color="#fff7cf"/>
-              <stop offset="55%" stop-color="#f3cf76"/>
-              <stop offset="100%" stop-color="#dd9e34"/>
-            </radialGradient>
-            <linearGradient id="stemA" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#9fd29a"/>
-              <stop offset="100%" stop-color="#6fae74"/>
-            </linearGradient>
-            <radialGradient id="leafA" cx="40%" cy="30%" r="80%">
-              <stop offset="0%" stop-color="#bfe3b6"/>
-              <stop offset="100%" stop-color="#7cb87f"/>
-            </radialGradient>
-          </defs>
-          <!-- stem + leaves -->
-          <g id="f1-stem" opacity="0">
-            <path d="M2,0 C 10,55 -8,110 4,178" fill="none" stroke="url(#stemA)" stroke-width="5" stroke-linecap="round"/>
-            <path d="M4,70 C -40,58 -58,86 -30,110 C -8,96 6,86 4,70 Z" fill="url(#leafA)"/>
-            <path d="M3,108 C 44,98 64,126 34,150 C 12,134 2,124 3,108 Z" fill="url(#leafA)"/>
-          </g>
-          <!-- petal rings injected by JS -->
-          <g id="f1-outer"></g>
-          <g id="f1-inner"></g>
-          <!-- golden center -->
-          <g id="f1-center" opacity="0">
-            <circle r="26" fill="url(#goldA)" opacity="0.35"/>
-            <circle r="16" fill="url(#goldA)"/>
-            <circle cx="-5" cy="-6" r="5" fill="rgba(255,255,255,0.55)"/>
-          </g>
-        </svg>
-      </div></div>
-    </div>
-  </div>
+         animation:glowPulse 4s ease-in-out infinite;"></div>
+            <div id="f1-scale">
+                <div class="fl-float">
+                    <div class="fl-breathe">
+                        <svg id="f1-svg" class="fl-svg" viewBox="-120 -130 240 300" width="220" height="275"
+                            style="max-width:74vw;">
+                            <defs>
+                                <radialGradient id="petalA" cx="50%" cy="22%" r="78%">
+                                    <stop offset="0%" stop-color="#fff2f6" />
+                                    <stop offset="42%" stop-color="#f7c1d4" />
+                                    <stop offset="100%" stop-color="#e07ba0" />
+                                </radialGradient>
+                                <radialGradient id="petalB" cx="50%" cy="22%" r="78%">
+                                    <stop offset="0%" stop-color="#fdeafb" />
+                                    <stop offset="45%" stop-color="#e9b7f0" />
+                                    <stop offset="100%" stop-color="#c07fda" />
+                                </radialGradient>
+                                <radialGradient id="goldA" cx="42%" cy="38%" r="70%">
+                                    <stop offset="0%" stop-color="#fff7cf" />
+                                    <stop offset="55%" stop-color="#f3cf76" />
+                                    <stop offset="100%" stop-color="#dd9e34" />
+                                </radialGradient>
+                                <linearGradient id="stemA" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#9fd29a" />
+                                    <stop offset="100%" stop-color="#6fae74" />
+                                </linearGradient>
+                                <radialGradient id="leafA" cx="40%" cy="30%" r="80%">
+                                    <stop offset="0%" stop-color="#bfe3b6" />
+                                    <stop offset="100%" stop-color="#7cb87f" />
+                                </radialGradient>
+                            </defs>
+                            <g id="f1-stem" opacity="0">
+                                <path d="M2,0 C 10,55 -8,110 4,178" fill="none" stroke="url(#stemA)" stroke-width="5"
+                                    stroke-linecap="round" />
+                                <path d="M4,70 C -40,58 -58,86 -30,110 C -8,96 6,86 4,70 Z" fill="url(#leafA)" />
+                                <path d="M3,108 C 44,98 64,126 34,150 C 12,134 2,124 3,108 Z" fill="url(#leafA)" />
+                            </g>
+                            <g id="f1-outer"></g>
+                            <g id="f1-inner"></g>
+                            <g id="f1-center" opacity="0">
+                                <circle r="26" fill="url(#goldA)" opacity="0.35" />
+                                <circle r="16" fill="url(#goldA)" />
+                                <circle cx="-5" cy="-6" r="5" fill="rgba(255,255,255,0.55)" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <!-- Welcome message + button -->
-  <div id="s1-msg" class="text-center mt-7" style="opacity:0; transform:translateY(20px);">
-    <p class="font-d t-dream" style="font-size:2.1rem; line-height:1.2;">Welcome, Miss 🌸</p>
-    <div id="s1-type" class="font-p t-soft mt-3" style="font-size:.92rem; font-weight:300; min-height:3.4em; line-height:1.7;"></div>
-    <div id="s1-btnwrap" class="mt-5" style="opacity:0; transform:scale(.85);">
-      <button id="btn-start" class="btn-glow">✨ Get Started</button>
-    </div>
-  </div>
-</section>
+        <div id="s1-msg" class="text-center mt-7" style="opacity:0; transform:translateY(20px);">
+            <p class="font-d t-dream" style="font-size:2.1rem; line-height:1.2;">Welcome, Miss 🌸</p>
+            <div id="s1-type" style="margin-top:.75rem; min-height:3.4em; line-height:1.7; font-size:1.25rem;"></div>
+            <div id="s1-btnwrap" style="margin-top:1.25rem; opacity:0; transform:scale(.85);">
+                <button id="btn-start" class="btn-glow">✨ Get Started</button>
+            </div>
+        </div>
+    </section>
 
-<!-- ════════════════════════════════════════════════════════════
-     SCENE 2
-     ════════════════════════════════════════════════════════════ -->
-<section id="s2" class="scene">
-  <div class="text-center max-w-xs mx-auto">
-    <div id="t2" class="font-d t-dream" style="font-size:1.85rem; line-height:1.65; min-height:9rem;"></div>
-  </div>
-</section>
+    <section id="s2" class="scene">
+        <div class="text-center" style="max-width:20rem; margin:0 auto;">
+            <div id="t2" style="font-size:1.7rem; line-height:1.6; min-height:9rem;"></div>
+        </div>
+    </section>
 
-<!-- ════════════════════════════════════════════════════════════
-     SCENE 3
-     ════════════════════════════════════════════════════════════ -->
-<section id="s3" class="scene">
-  <div class="text-center max-w-xs mx-auto">
-    <div id="t3" class="font-d t-dream" style="font-size:1.78rem; line-height:1.62; min-height:13rem;"></div>
-  </div>
-</section>
+    <section id="s3" class="scene">
+        <div class="text-center" style="max-width:20rem; margin:0 auto;">
+            <div id="t3" style="font-size:1.55rem; line-height:1.58; min-height:13rem;"></div>
+        </div>
+    </section>
 
-<!-- ════════════════════════════════════════════════════════════
-     SCENE 4
-     ════════════════════════════════════════════════════════════ -->
-<section id="s4" class="scene">
-  <div class="text-center max-w-sm mx-auto">
-    <div id="t4" class="font-d t-dream" style="font-size:1.62rem; line-height:1.62; min-height:14rem;"></div>
-  </div>
-</section>
+    <section id="s4" class="scene">
+        <div class="text-center" style="max-width:22rem; margin:0 auto;">
+            <div id="t4" style="font-size:1.45rem; line-height:1.58; min-height:14rem;"></div>
+        </div>
+    </section>
 
-<!-- ════════════════════════════════════════════════════════════
-     SCENE 5 — larger magical flower
-     ════════════════════════════════════════════════════════════ -->
-<section id="s5" class="scene" style="gap:1.4rem;">
-  <div id="f5-pos" style="opacity:0; position:relative; flex-shrink:0;">
-    <div id="f5-glow" style="position:absolute; inset:-26%; border-radius:50%;
+    <section id="s5" class="scene" style="gap:1.2rem;">
+        <div id="f5-pos" style="opacity:0; position:relative; flex-shrink:0;">
+            <div id="f5-glow" style="position:absolute; inset:-26%; border-radius:50%;
          background:radial-gradient(circle, rgba(245,182,200,0.55) 0%, rgba(183,133,224,0.25) 48%, transparent 72%);
          animation:glowPulse 3.4s ease-in-out infinite;"></div>
-    <div id="f5-scale">
-      <div class="fl-float" style="animation-duration:7s;"><div class="fl-breathe" style="animation-duration:5s;">
-        <svg id="f5-svg" class="fl-svg" viewBox="-120 -120 240 240" width="240" height="240"
-             style="max-width:68vw;">
-          <g id="f5-outer"></g>
-          <g id="f5-mid"></g>
-          <g id="f5-inner"></g>
-          <g>
-            <circle r="30" fill="url(#goldA)" opacity="0.3"/>
-            <circle r="19" fill="url(#goldA)"/>
-            <circle cx="-6" cy="-7" r="6" fill="rgba(255,255,255,0.5)"/>
-          </g>
-        </svg>
-      </div></div>
-    </div>
-  </div>
-  <div class="text-center max-w-xs mx-auto">
-    <div id="t5" class="font-d t-dream" style="font-size:1.62rem; line-height:1.6; min-height:11rem;"></div>
-  </div>
-</section>
+            <div id="f5-scale">
+                <div class="fl-float" style="animation-duration:7s;">
+                    <div class="fl-breathe" style="animation-duration:5s;">
+                        <svg id="f5-svg" class="fl-svg" viewBox="-120 -120 240 240" width="240" height="240"
+                            style="max-width:54vw;">
+                            <g id="f5-outer"></g>
+                            <g id="f5-mid"></g>
+                            <g id="f5-inner"></g>
+                            <g>
+                                <circle r="30" fill="url(#goldA)" opacity="0.3" />
+                                <circle r="19" fill="url(#goldA)" />
+                                <circle cx="-6" cy="-7" r="6" fill="rgba(255,255,255,0.5)" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center" style="max-width:20rem; margin:0 auto;">
+            <div id="t5" style="font-size:1.4rem; line-height:1.56; min-height:11rem;"></div>
+        </div>
+    </section>
 
-<!-- ════════════════════════════════════════════════════════════
-     FINAL SCENE — flower tree + letter
-     ════════════════════════════════════════════════════════════ -->
-<section id="sf" class="scene" style="justify-content:flex-start; padding-top:7vh;">
-  <div class="flex flex-col items-center w-full max-w-sm mx-auto">
+    <section id="sf" class="scene">
+        <div
+            style="display:flex; flex-direction:column; align-items:center; width:100%; max-width:24rem; margin:0 auto;">
 
-    <!-- Flower tree -->
-    <div id="tree-pos" style="opacity:0; position:relative; flex-shrink:0;">
-      <div style="position:absolute; inset:-30%; border-radius:50%;
+            <div id="tree-pos" style="opacity:0; position:relative; flex-shrink:0;">
+                <div style="position:absolute; inset:-30%; border-radius:50%;
            background:radial-gradient(circle, rgba(245,182,200,0.4) 0%, rgba(183,133,224,0.2) 50%, transparent 72%);
            animation:glowPulse 4s ease-in-out infinite;"></div>
-      <svg class="fl-svg fl-float" viewBox="-110 -120 220 230" width="150" height="157"
-           style="max-width:46vw;">
-        <defs>
-          <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0">
-            <stop offset="0%" stop-color="#5a3d4a"/><stop offset="100%" stop-color="#7a5360"/>
-          </linearGradient>
-        </defs>
-        <!-- trunk + branches -->
-        <path d="M-6,100 C -10,40 -4,10 0,-6 C 4,10 10,40 6,100 Z" fill="url(#trunk)"/>
-        <path d="M0,10 C -34,-6 -54,-30 -62,-58" fill="none" stroke="url(#trunk)" stroke-width="5" stroke-linecap="round"/>
-        <path d="M0,2 C 30,-14 52,-34 60,-64" fill="none" stroke="url(#trunk)" stroke-width="5" stroke-linecap="round"/>
-        <path d="M0,-2 C -8,-40 -4,-66 2,-90" fill="none" stroke="url(#trunk)" stroke-width="5" stroke-linecap="round"/>
-        <g id="tree-blossoms"></g>
-      </svg>
+                <svg class="fl-svg fl-float" viewBox="-110 -120 220 230" width="150" height="157"
+                    style="max-width:42vw;">
+                    <defs>
+                        <linearGradient id="trunk" x1="0" y1="1" x2="0" y2="0">
+                            <stop offset="0%" stop-color="#5a3d4a" />
+                            <stop offset="100%" stop-color="#7a5360" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M-6,100 C -10,40 -4,10 0,-6 C 4,10 10,40 6,100 Z" fill="url(#trunk)" />
+                    <path d="M0,10 C -34,-6 -54,-30 -62,-58" fill="none" stroke="url(#trunk)" stroke-width="5"
+                        stroke-linecap="round" />
+                    <path d="M0,2 C 30,-14 52,-34 60,-64" fill="none" stroke="url(#trunk)" stroke-width="5"
+                        stroke-linecap="round" />
+                    <path d="M0,-2 C -8,-40 -4,-66 2,-90" fill="none" stroke="url(#trunk)" stroke-width="5"
+                        stroke-linecap="round" />
+                    <g id="tree-blossoms"></g>
+                </svg>
+            </div>
+
+            <div id="letter" class="text-center"
+                style="margin-top:1rem; padding:0 .5rem; font-size:1.16rem; line-height:1.66;"></div>
+
+            <div id="sign" class="font-p t-faint text-center"
+                style="margin-top:1rem; opacity:0; font-size:.74rem; letter-spacing:.1em; font-style:italic; line-height:1.6;">
+                — With all the kindness<br>my heart could hold.
+            </div>
+
+            <div id="mem-wrap" style="margin-top:1.6rem; margin-bottom:3rem; opacity:0; transform:scale(.85);">
+                <button id="btn-mem" class="btn-glow">❤️ Keep This Memory</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="blurLayer"></div>
+    <div id="blackout"></div>
+    <div id="finalMsg">
+        <div id="finalMsg-text" style="font-size:2rem; line-height:1.5;"></div>
     </div>
-
-    <!-- Letter -->
-    <div id="letter" class="font-d t-dream text-center mt-4 px-2"
-         style="font-size:1.18rem; line-height:1.62; opacity:1;"></div>
-
-    <!-- Signature -->
-    <div id="sign" class="font-p t-faint text-center mt-4" style="opacity:0; font-size:.74rem; letter-spacing:.1em; font-style:italic; line-height:1.6;">
-      — With all the kindness<br>my heart could hold.
-    </div>
-
-    <!-- Button -->
-    <div id="mem-wrap" class="mt-6 mb-10" style="opacity:0; transform:scale(.85);">
-      <button id="btn-mem" class="btn-glow">❤️ Keep This Memory</button>
-    </div>
-  </div>
-</section>
-
-<!-- ── Finale overlays ── -->
-<div id="blurLayer"></div>
-<div id="blackout"></div>
-<div id="finalMsg">
-  <div>
-    <div id="finalMsg-text" class="font-d t-dream" style="font-size:2rem; line-height:1.5;"></div>
-  </div>
-</div>
-<div id="remainFlower">
-  <div style="position:relative;">
-    <div style="position:absolute; inset:-60%; border-radius:50%;
+    <div id="remainFlower">
+        <div style="position:relative;">
+            <div style="position:absolute; inset:-60%; border-radius:50%;
          background:radial-gradient(circle, rgba(245,182,200,0.45) 0%, rgba(183,133,224,0.2) 50%, transparent 72%);
          animation:glowPulse 4s ease-in-out infinite;"></div>
-    <div class="fl-float" style="font-size:4.4rem; filter:drop-shadow(0 0 22px rgba(245,182,200,0.85));">🌸</div>
-  </div>
-</div>
+            <div class="fl-float" style="font-size:4.4rem; filter:drop-shadow(0 0 22px rgba(245,182,200,0.85));">🌸
+            </div>
+        </div>
+    </div>
 
-<script>
-/* ════════════════════════════════════════════════════════════
-   UTILITIES
-   ════════════════════════════════════════════════════════════ */
-const $  = id => document.getElementById(id);
-const R  = (a,b) => Math.random()*(b-a)+a;
-const NS = 'http://www.w3.org/2000/svg';
-const wait = ms => new Promise(r=>setTimeout(r,ms));
-
-/* Easing */
-const eo3  = t => 1-Math.pow(1-t,3);                              // outCubic
-const eo5  = t => 1-Math.pow(1-t,5);                              // outQuint
-const eis  = t => -(Math.cos(Math.PI*t)-1)/2;                     // inOutSine
-const eob  = t => { const c1=1.70158, c3=c1+1; return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2); }; // outBack
-const eoel = t => { if(t===0||t===1)return t; return Math.pow(2,-10*t)*Math.sin((t*10-0.75)*(2*Math.PI/3))+1; };
-
-/* rAF tween */
-function tw(dur, ease, fn, done){
-  const s = performance.now();
-  (function tick(n){
-    const r = Math.min((n-s)/dur,1);
-    fn(ease(r), r);
-    if(r<1) requestAnimationFrame(tick); else done&&done();
-  })(performance.now());
-}
-
-/* ════════════════════════════════════════════════════════════
-   CURSOR (desktop)
-   ════════════════════════════════════════════════════════════ */
-const cur=$('cursor'); let cmx=-50, cmy=-50;
-addEventListener('mousemove', e=>{ cmx=e.clientX; cmy=e.clientY; });
-(function curLoop(){ cur.style.left=cmx+'px'; cur.style.top=cmy+'px'; requestAnimationFrame(curLoop); })();
-
-/* ════════════════════════════════════════════════════════════
-   STAR FIELD
-   ════════════════════════════════════════════════════════════ */
-const sC=$('stars'), sX=sC.getContext('2d');
-let stars=[];
-function buildStars(){
-  const n = Math.min(90, Math.round(innerWidth*innerHeight/13000));
-  stars = Array.from({length:n},()=>({
-    x:R(0,1), y:R(0,1), r:R(.4,1.7),
-    ang:R(0,Math.PI*2), spd:R(.00008,.0002),
-    tw:R(0,Math.PI*2), tws:R(.005,.02), hue:R(310,355)
-  }));
-}
-function sizeStars(){ sC.width=innerWidth; sC.height=innerHeight; }
-addEventListener('resize',()=>{ sizeStars(); buildStars(); });
-sizeStars(); buildStars();
-(function starLoop(){
-  const W=sC.width,H=sC.height; sX.clearRect(0,0,W,H);
-  for(const s of stars){
-    s.ang+=s.spd; s.tw+=s.tws;
-    const a=.2+.5*((Math.sin(s.tw)+1)/2);
-    const px=((s.x+Math.cos(s.ang)*.03)%1+1)%1*W;
-    const py=((s.y+Math.sin(s.ang)*.03)%1+1)%1*H;
-    sX.beginPath(); sX.arc(px,py,s.r,0,7); sX.fillStyle=`hsla(${s.hue},80%,84%,${a})`; sX.fill();
-  }
-  requestAnimationFrame(starLoop);
-})();
-
-/* ════════════════════════════════════════════════════════════
-   BOKEH
-   ════════════════════════════════════════════════════════════ */
-(function buildBokeh(){
-  const wrap=$('bokeh');
-  for(let i=0;i<7;i++){
-    const b=document.createElement('div'); b.className='bokeh';
-    const sz=R(70,180);
-    b.style.width=b.style.height=sz+'px';
-    b.style.left=R(0,100)+'vw';
-    b.style.bottom=R(-10,40)+'vh';
-    b.style.animationDuration=R(14,26)+'s';
-    b.style.animationDelay=(-R(0,20))+'s';
-    wrap.appendChild(b);
-  }
-})();
-
-/* ════════════════════════════════════════════════════════════
-   PARTICLE GLOW
-   ════════════════════════════════════════════════════════════ */
-const pC=$('particles'), pX=pC.getContext('2d');
-const parts=[]; let pInt=0.35;
-function sizeP(){ pC.width=innerWidth; pC.height=innerHeight; }
-addEventListener('resize',sizeP); sizeP();
-function spawnP(x,y,n=1,burst=false){
-  for(let i=0;i<n;i++){
-    const a=burst?R(0,Math.PI*2):R(-.4,.4)-Math.PI/2;
-    const sp=burst?R(.5,2.5):R(.15,.85);
-    parts.push({ x:x??R(0,pC.width), y:y??R(pC.height*.15,pC.height),
-      vx:Math.cos(a)*sp, vy:Math.sin(a)*sp-(burst?0:R(.1,.5)),
-      r:R(.8,burst?4:2.4), a:R(.5,1), d:R(.003,burst?.014:.007),
-      h:R(300,360), s:R(70,95), l:R(76,92) });
-  }
-}
-setInterval(()=>{ for(let i=0;i<Math.round(R(1,3*pInt+1));i++) spawnP(null,null,1,false); },130);
-(function pLoop(){
-  pX.clearRect(0,0,pC.width,pC.height);
-  for(let i=parts.length-1;i>=0;i--){
-    const p=parts[i]; p.x+=p.vx; p.y+=p.vy; p.vy-=.003; p.a-=p.d;
-    if(p.a<=0){ parts.splice(i,1); continue; }
-    pX.beginPath(); pX.arc(p.x,p.y,p.r,0,7);
-    pX.fillStyle=`hsla(${p.h},${p.s}%,${p.l}%,${p.a})`; pX.fill();
-  }
-  requestAnimationFrame(pLoop);
-})();
-addEventListener('mousemove', e=>{ if(Math.random()<.2) spawnP(e.clientX,e.clientY); });
-addEventListener('touchmove', e=>{ const t=e.touches[0]; if(Math.random()<.35) spawnP(t.clientX,t.clientY,2); }, {passive:true});
-
-/* ════════════════════════════════════════════════════════════
-   RIPPLE
-   ════════════════════════════════════════════════════════════ */
-function ripple(x,y){
-  const el=document.createElement('div'); el.className='ripple';
-  el.style.left=x+'px'; el.style.top=y+'px'; document.body.appendChild(el);
-  tw(720,eo3,t=>{ el.style.transform=`translate(-50%,-50%) scale(${1+t*4})`; el.style.opacity=(1-t)*.7; }, ()=>el.remove());
-}
-
-/* ════════════════════════════════════════════════════════════
-   PETALS (fall + rise)
-   ════════════════════════════════════════════════════════════ */
-const PL=$('petalsLayer');
-const PETAL_CHARS=['🌸','🌺','🌼','💮','🪷'];
-let fallTimer=null;
-
-function makePetal(rising=false){
-  const el=document.createElement('div'); el.className='petal-em';
-  el.textContent=PETAL_CHARS[Math.floor(R(0,PETAL_CHARS.length))];
-  const size=R(.85,1.7); el.style.fontSize=size+'rem';
-  el.style.filter=`hue-rotate(${R(-20,20)}deg) drop-shadow(0 0 6px rgba(245,182,200,.4))`;
-  PL.appendChild(el);
-
-  const startX=R(0,innerWidth);
-  const dur=rising?R(4500,8000):R(6000,11000);
-  const drift=R(-90,90), rot=R(-220,220);
-  const fromY = rising ? innerHeight+40 : -50;
-  const toY   = rising ? -60 : innerHeight+60;
-
-  tw(dur,eis,(t)=>{
-    const sway=Math.sin(t*Math.PI*R(2,4))*R(16,42);
-    const x=startX+sway+t*drift;
-    const y=fromY+(toY-fromY)*t;
-    el.style.transform=`translate(${x}px,${y}px) rotate(${t*rot}deg)`;
-    el.style.opacity = t<.08 ? t/.08 : (t>.9 ? (1-t)/.1 : 1);
-  }, ()=>el.remove());
-}
-function startFalling(rate=1500){ if(fallTimer)clearInterval(fallTimer); makePetal(); fallTimer=setInterval(()=>makePetal(false),rate); }
-
-/* ════════════════════════════════════════════════════════════
-   BUTTERFLIES
-   ════════════════════════════════════════════════════════════ */
-const bflies=[];
-function spawnButterflies(){
-  ['🦋','🦋','🌸'].forEach(c=>{
-    const el=document.createElement('div'); el.className='butterfly'; el.textContent=c;
-    el.style.cssText+=`left:${R(8,80)}vw;top:${R(18,68)}vh;font-size:${R(1.2,1.9)}rem;animation-delay:${R(0,3)}s;animation-duration:${R(7,11)}s;`;
-    document.body.appendChild(el); bflies.push(el);
-    tw(1200,eo3,t=>el.style.opacity=t*R(.45,.8));
-  });
-}
-function clearButterflies(){ bflies.forEach(b=>tw(600,eo3,t=>b.style.opacity=1-t,()=>b.remove())); bflies.length=0; }
-
-/* ════════════════════════════════════════════════════════════
-   HEART BURST
-   ════════════════════════════════════════════════════════════ */
-function heartBurst(x,y){
-  const em=['💖','💗','💓','✨','🌸','💫','🌺','💝'];
-  for(let i=0;i<34;i++){
-    const el=document.createElement('div'); el.className='hburst';
-    el.textContent=em[Math.floor(R(0,em.length))];
-    el.style.left=x+'px'; el.style.top=y+'px'; el.style.fontSize=R(.8,2)+'rem';
-    document.body.appendChild(el);
-    const a=R(0,Math.PI*2), d=R(60,260), dur=R(900,1900);
-    tw(dur,eo5,t=>{
-      const px=Math.cos(a)*d*t, py=Math.sin(a)*d*t - t*t*90;
-      el.style.transform=`translate(${px}px,${py}px) scale(${1-t*.4}) rotate(${t*R(-90,90)}deg)`;
-      el.style.opacity = t<.6?1:(1-(t-.6)/.4);
-    }, ()=>el.remove());
-  }
-  pInt=3.2; for(let i=0;i<6;i++) setTimeout(()=>spawnP(x+R(-40,40),y+R(-40,40),16,true),i*160);
-}
-
-/* ════════════════════════════════════════════════════════════
-   BLOSSOM BUILDER
-   ════════════════════════════════════════════════════════════ */
-function petalPath(L,W){
-  return `M0 0 C ${-W} ${-L*0.32} ${-W} ${-L*0.74} 0 ${-L} C ${W} ${-L*0.74} ${W} ${-L*0.32} 0 0 Z`;
-}
-function buildRing(group, count, L, W, fill, offset=0, opacity=0.82){
-  group.innerHTML='';
-  const petals=[];
-  for(let i=0;i<count;i++){
-    const ang=i/count*360+offset;
-    const p=document.createElementNS(NS,'path');
-    p.setAttribute('d',petalPath(L,W));
-    p.setAttribute('fill',fill);
-    p.style.opacity=0;
-    p.dataset.ang=ang; p.dataset.op=opacity;
-    p.setAttribute('transform',`rotate(${ang}) scale(0)`);
-    group.appendChild(p); petals.push(p);
-  }
-  return petals;
-}
-
-/* Bloom a set of petals one-by-one */
-async function bloomPetals(petals, stagger, dur){
-  for(const p of petals){
-    const ang=p.dataset.ang, op=+p.dataset.op;
-    await wait(stagger);
-    tw(dur,eoel,(t)=>{
-      const s=Math.min(1,t);
-      p.setAttribute('transform',`rotate(${ang}) scale(${s})`);
-      p.style.opacity=Math.min(1,t*1.2)*op;
-    });
-  }
-}
-
-/* ── Scene 1 flower ── */
-const f1Outer=buildRing($('f1-outer'),12,86,15,'url(#petalA)',0,0.78);
-const f1Inner=buildRing($('f1-inner'),12,52,11,'url(#petalB)',15,0.9);
-
-async function bloomFlower1(){
-  const pos=$('f1-pos'), glow=$('f1-glow'), scale=$('f1-scale');
-  scale.style.transformOrigin='center bottom';
-  scale.style.transform='scale(.2)';
-  tw(700,eo5,t=>{ pos.style.opacity=t; scale.style.transform=`scale(${.2+t*.8})`; });
-  await wait(380);
-  tw(620,eo3,t=>$('f1-stem').setAttribute('opacity',t));     // stem + leaves
-  await wait(360);
-  tw(900,eo3,t=>glow.style.opacity=t*.9);                    // glow
-  await bloomPetals(f1Outer,52,560);
-  await wait(120);
-  await bloomPetals(f1Inner,40,480);
-  tw(460,eo3,t=>$('f1-center').setAttribute('opacity',t));   // golden center
-  const bx=pos.getBoundingClientRect();
-  for(let b=0;b<3;b++){ await wait(170); spawnP(bx.left+bx.width/2+R(-26,26), bx.top+bx.height*0.4+R(-26,26), 10, true); }
-  await wait(400);
-}
-
-/* ── Scene 5 flower (3 rings) ── */
-let f5built=false;
-function buildFlower5(){
-  if(f5built) return;
-  buildRing($('f5-outer'),12,96,16,'url(#petalA)',0,0.7);
-  buildRing($('f5-mid'),  12,70,14,'url(#petalB)',15,0.82);
-  buildRing($('f5-inner'),12,44,10,'url(#petalA)',7,0.92);
-  f5built=true;
-}
-async function bloomFlower5(){
-  buildFlower5();
-  const pos=$('f5-pos'), scale=$('f5-scale');
-  scale.style.transform='scale(.55)';
-  tw(900,eo5,t=>{ pos.style.opacity=t; scale.style.transform=`scale(${.55+t*.45})`; });
-  await wait(300);
-  await bloomPetals([...$('f5-outer').children],38,560);
-  await bloomPetals([...$('f5-mid').children],34,500);
-  await bloomPetals([...$('f5-inner').children],30,460);
-  const bx=pos.getBoundingClientRect();
-  for(let b=0;b<5;b++){ await wait(140); spawnP(bx.left+bx.width/2+R(-20,20), bx.top+bx.height/2+R(-20,20), 14, true); }
-}
-
-/* ── Final flower tree blossoms ── */
-function buildTree(){
-  const g=$('tree-blossoms');
-  const spots=[[-62,-58],[60,-64],[2,-90],[-30,-30],[34,-36],[0,-50],[-46,-10],[44,-8]];
-  spots.forEach(([x,y],i)=>{
-    const c=document.createElementNS(NS,'circle');
-    c.setAttribute('cx',x); c.setAttribute('cy',y);
-    c.setAttribute('r', i<3?9:7);
-    c.setAttribute('fill', i%2?'url(#petalB)':'url(#petalA)');
-    c.style.opacity=0; c.dataset.i=i;
-    g.appendChild(c);
-  });
-}
-async function bloomTree(){
-  buildTree();
-  const pos=$('tree-pos');
-  tw(900,eob,t=>{ pos.style.opacity=Math.min(1,t*1.3); pos.style.transform=`scale(${.6+0.4*Math.min(1,t)})`; });
-  await wait(300);
-  for(const c of [...$('tree-blossoms').children]){
-    await wait(70);
-    tw(520,eoel,t=>{ c.style.opacity=t; c.setAttribute('r',(+c.dataset.i<3?9:7)*Math.min(1,t)); });
-  }
-}
-
-/* ════════════════════════════════════════════════════════════
-   TEXT ENGINES
-   ════════════════════════════════════════════════════════════ */
-/* Character typing, line by line */
-async function typeLines(el, lines, {cd=52, ld=820}={}){
-  el.innerHTML='';
-  const caret=document.createElement('span'); caret.className='caret'; el.appendChild(caret);
-  for(let i=0;i<lines.length;i++){
-    const line=lines[i];
-    const div=document.createElement('div'); div.style.cssText='min-height:1.5em;opacity:0;';
-    el.insertBefore(div,caret);
-    await wait(i===0?180:ld);
-    tw(260,eo3,t=>div.style.opacity=t); await wait(260);
-    if(line==='...'){ div.textContent='...'; await wait(760); }
-    else if(line===''){ div.innerHTML='&nbsp;'; }
-    else for(const ch of line){ div.textContent+=ch; await wait(cd+R(-12,12)); }
-  }
-  caret.remove();
-}
-
-/* Elegant line reveal (for the letter) — fade + rise + de-blur */
-async function revealLines(el, lines, {stagger=520, dur=900, hold=0}={}){
-  el.innerHTML='';
-  for(const line of lines){
-    const div=document.createElement('div'); div.className='rline';
-    div.style.minHeight = line==='' ? '0.7em' : '1.5em';
-    div.innerHTML = line==='' ? '&nbsp;' : line;
-    el.appendChild(div);
-    tw(dur,eo3,t=>{
-      div.style.opacity=t;
-      div.style.transform=`translateY(${(1-t)*16}px)`;
-      div.style.filter=`blur(${(1-t)*5}px)`;
-    });
-    await wait(stagger);
-  }
-  if(hold) await wait(hold);
-}
-
-/* ════════════════════════════════════════════════════════════
-   SCENE MANAGER
-   ════════════════════════════════════════════════════════════ */
-let busy=false;            // guards transitions
-let scene='s1';
-function goTo(id, dur=950){
-  return new Promise(res=>{
-    const from=document.querySelector('.scene.active');
-    const to=$(id);
-    tw(dur/2,eo3,t=>{ if(from) from.style.opacity=1-t; }, ()=>{
-      if(from){ from.classList.remove('active'); from.style.opacity=0; }
-      to.classList.add('active'); to.style.opacity=0; scene=id;
-      tw(dur,eo3,t=>to.style.opacity=t, res);
-    });
-  });
-}
-function setBrighten(target,dur=1400){ const from=parseFloat($('brighten').style.opacity)||0; tw(dur,eis,t=>{ $('brighten').style.opacity=from+(target-from)*t; }); }
-
-/* ════════════════════════════════════════════════════════════
-   SCENE 1 — tap to bloom
-   ════════════════════════════════════════════════════════════ */
-let tapped=false;
-async function onFirstTap(x,y){
-  if(tapped||!hintReady) return; tapped=true;
-  ripple(x,y); spawnP(x,y,14,true);
-  tw(450,eo3,t=>{ $('hint').style.opacity=(1-t)*.9; $('hint').style.transform=`translateX(-50%) translateY(${t*16}px)`; },
-     ()=>$('hint').style.display='none');
-  await wait(260);
-  await bloomFlower1();
-
-  // Welcome + typing + button
-  tw(900,eo3,t=>{ $('s1-msg').style.opacity=t; $('s1-msg').style.transform=`translateY(${(1-t)*20}px)`; });
-  await wait(650);
-  await typeLines($('s1-type'),['I made something...','just for you.'],{cd:55,ld:700});
-  await wait(350);
-  tw(700,eob,t=>{ $('s1-btnwrap').style.opacity=t; $('s1-btnwrap').style.transform=`scale(${.85+t*.15})`; });
-  pInt=0.6;
-}
-
-/* The touch hint appears after 2s of only particles */
-let hintReady=false;
-$('hint').style.opacity=0;
-
-/* Scene-1 tap listeners (ignore taps on the button itself) */
-function s1Handler(e){
-  if(e.target.closest('#btn-start')) return;
-  const t=e.touches?e.touches[0]:e;
-  onFirstTap(t.clientX,t.clientY);
-}
-$('s1').addEventListener('click', s1Handler);
-$('s1').addEventListener('touchstart', s1Handler, {passive:true});
-
-/* ════════════════════════════════════════════════════════════
-   SCENE FLOWS
-   ════════════════════════════════════════════════════════════ */
-$('btn-start').addEventListener('click', async (e)=>{
-  e.stopPropagation();
-  if(busy||scene!=='s1') return; busy=true;
-  ripple(e.clientX,e.clientY); spawnP(e.clientX,e.clientY,20,true);
-  for(let i=0;i<8;i++) setTimeout(()=>makePetal(false),i*130);
-  startFalling(2400);
-  await goTo('s2',980);
-  busy=false;
-  runS2();
-});
-
-async function runS2(){
-  await typeLines($('t2'),['Sometimes...','','some people become special','without any reason.','...'],{cd:56,ld:900});
-  await wait(1100);
-  await goTo('s3',980);
-  runS3();
-}
-
-async function runS3(){
-  setBrighten(0.5,1600);                                  // slightly brighter
-  await typeLines($('t3'),[
-    'I don\'t know','if I ever became','someone important to you.','...',
-    'But somehow...','you became','someone special to me.'
-  ],{cd:54,ld:880});
-  await wait(1200);
-  await goTo('s4',980);
-  runS4();
-}
-
-async function runS4(){
-  setBrighten(0.75,1600);
-  spawnButterflies(); pInt=1.1;
-  await typeLines($('t4'),[
-    'Maybe you\'re not mine.','Maybe you never will be.','...',
-    'And maybe...','that\'s completely okay.','',
-    'Because some people','don\'t need promises','to become unforgettable.'
-  ],{cd:50,ld:820});
-  await wait(1200);
-  clearButterflies();
-  await goTo('s5',1050);
-  runS5();
-}
-
-async function runS5(){
-  setBrighten(0.4,1600);
-  pInt=1.7;
-  bloomFlower5();
-  await wait(1500);
-  await typeLines($('t5'),[
-    'I don\'t know','whether life','will ever bring us','to the same destination.','...',
-    'But...','if there is one thing','I wanted to do,','it was to create',
-    'one beautiful moment','that belonged only to you.'
-  ],{cd:50,ld:720});
-  await wait(1300);
-  await goTo('sf',1150);
-  runFinal();
-}
-
-async function runFinal(){
-  setBrighten(0.6,1600);
-  startFalling(900); pInt=1.4;
-  await bloomTree();
-  await wait(400);
-
-  await revealLines($('letter'),[
-    'There are thousands of people','we meet in life.','',
-    'Most become memories.','',
-    'A very few become','a quiet part of our heart.','',
-    'I don\'t know','what I am to you.','',
-    'Maybe just another name.','Maybe just another moment.','',
-    'But if one day','you ever remember me,','',
-    'I hope you remember','that someone once sat down,',
-    'opened a blank page,','and built','a tiny little universe','just to make you smile.','',
-    '🌸'
-  ],{stagger:560, dur:900});
-
-  await wait(700);
-  tw(1100,eo3,t=>$('sign').style.opacity=t);
-  await wait(900);
-  tw(800,eob,t=>{ $('mem-wrap').style.opacity=t; $('mem-wrap').style.transform=`scale(${.85+t*.15})`; });
-  busy=false;
-}
-
-/* ════════════════════════════════════════════════════════════
-   KEEP THIS MEMORY — finale sequence
-   ════════════════════════════════════════════════════════════ */
-let memDone=false;
-$('btn-mem').addEventListener('click', async (e)=>{
-  e.stopPropagation();
-  if(memDone) return; memDone=true;
-  $('btn-mem').disabled=true; $('btn-mem').style.pointerEvents='none';
-
-  heartBurst(e.clientX,e.clientY);
-
-  // 1) Soft blur over the scene
-  tw(1200,eo3,t=>{
-    const b=t*9;
-    $('blurLayer').style.backdropFilter=`blur(${b}px)`;
-    $('blurLayer').style.webkitBackdropFilter=`blur(${b}px)`;
-    $('blurLayer').style.opacity=t;
-  });
-
-  // 2) Hundreds of petals float UP + intensify glow
-  if(fallTimer){ clearInterval(fallTimer); fallTimer=null; }   // stop falling
-  let rise=setInterval(()=>makePetal(true), 70);
-  pInt=2.6;
-
-  await wait(2600);
-
-  // 3) Final message (reveal container first, then type into it)
-  tw(900,eo3,t=>$('finalMsg').style.opacity=t);
-  await typeLines($('finalMsg-text'),['Thank you','for visiting','this little world.','','Goodbye... 🌸'],{cd:62,ld:760});
-
-  // 4) After 5s, fade everything into darkness, leave one glowing flower
-  await wait(5000);
-  clearInterval(rise);
-  tw(2400,eis,t=>{
-    $('blackout').style.opacity=t*0.97;
-    $('finalMsg').style.opacity=1-t;
-    document.querySelectorAll('.scene').forEach(s=>s.style.opacity=(1-t)*(s.classList.contains('active')?1:0));
-  }, ()=>{
-    tw(1600,eo3,t=>$('remainFlower').style.opacity=t);
-    pInt=0.4;
-  });
-});
-
-/* ════════════════════════════════════════════════════════════
-   INIT — 2s of only particles, then the hint fades in
-   ════════════════════════════════════════════════════════════ */
-for(let i=0;i<26;i++) setTimeout(()=>spawnP(null,null,1,false), i*70);
-setTimeout(()=>{
-  hintReady=true;
-  tw(1400,eo3,t=>$('hint').style.opacity=t*.55);
-}, 2000);
-</script>
+    <script src="./js/animations.js"></script>
+    <script src="./js/sceneManager.js"></script>
+    <script src="./js/app.js"></script>
 </body>
+
 </html>
