@@ -1,5 +1,4 @@
 
-
 let scene = 's1';
 let busy = false;
 
@@ -26,40 +25,52 @@ function setBrighten(target, dur = 1600) {
 
 async function runS2() {
   await typeSequence($('t2'), [
-    { text: 'Sometimes...', hold: 2000 },
-    { text: 'some people become special', hold: 2000 },
-    { text: 'without any reason.', hold: 4500 },
+
+
+    { text: `Funny, isn't it?`, hold: 2200 },
+    { text: ``, hold: 500 },
+    { text: `How someone,`, hold: 1600 },
+    { text: `can become special...`, hold: 1800 },
+    { text: `Without a big moment.`, hold: 1900 },
+    { text: `Without a beginning`, hold: 1700 },
+    { text: ``, hold: 500 },
+    { text: `You can point to.`, hold: 1500 },
+    { text: `They simply arrive.`, hold: 1400 },
+    { text: `And little by little,`, hold: 1600 },
+    { text: `they turn into`, hold: 1700 },
+    { text: `one of your favorite thoughts.`, hold: 5500 },
   ]);
   await goTo('s3', 1100);
   runS3();
 }
 
 async function runS3() {
-  setBrighten(0.45);
+  setBrighten(0.42);
   await typeSequence($('t3'), [
-    { text: 'I don’t know', hold: 1500 },
-    { text: 'if I ever became', hold: 1500 },
-    { text: 'someone important to you.', hold: 3500 },
-    { text: 'But somehow...', hold: 1800 },
-    { text: 'you became', hold: 1500 },
-    { text: 'someone special to me.', hold: 5000 },
+    { text: `I don't know what I am to you.`, hold: 2800 },
+    { text: `Maybe nothing much.`, hold: 2500 },
+    { text: `Maybe just someone you pass by.`, hold: 3000 },
+    { text: `But you...`, hold: 2400 },
+    { text: `became something I didn't plan for.`, hold: 3200 },
+    { text: `Quietly.`, hold: 1600 },
+    { text: `Without warning.`, hold: 5500 },
   ]);
   await goTo('s4', 1100);
   runS4();
 }
 
 async function runS4() {
-  setBrighten(0.7);
+  setBrighten(0.68);
   spawnButterflies();
   pInt = 1.1;
   await typeSequence($('t4'), [
-    { text: 'Maybe you’re not mine.', hold: 1800 },
-    { text: 'Maybe you never will be.', hold: 2200 },
-    { text: 'And maybe...', hold: 1600 },
-    { text: 'that’s completely okay.', hold: 3800 },
-    { text: 'Because some people', hold: 1500 },
-    { text: 'don’t need promises', hold: 1500 },
-    { text: 'to become unforgettable.', hold: 5000 },
+    { text: `Maybe you're not mine.`, hold: 2200 },
+    { text: `Maybe you never will be.`, hold: 2600 },
+    { text: `And that's okay.`, hold: 3500 },
+    { text: `Not everything beautiful`, hold: 1600 },
+    { text: `needs to stay forever.`, hold: 2200 },
+    { text: `Some things just need`, hold: 1600 },
+    { text: `to have existed.`, hold: 5500 },
   ]);
   clearButterflies();
   await goTo('s5', 1200);
@@ -67,28 +78,25 @@ async function runS4() {
 }
 
 async function runS5() {
-  setBrighten(0.4);
+  setBrighten(0.38);
   pInt = 1.7;
   bloomFlower5();
   await wait(1800);
   await typeSequence($('t5'), [
-    { text: 'I don’t know', hold: 1500 },
-    { text: 'whether life', hold: 1400 },
-    { text: 'will ever bring us', hold: 1500 },
-    { text: 'to the same destination.', hold: 3500 },
-    { text: 'But...', hold: 1700 },
-    { text: 'if there is one thing', hold: 1400 },
-    { text: 'I wanted to do,', hold: 1700 },
-    { text: 'it was to create', hold: 1500 },
-    { text: 'one beautiful moment', hold: 1600 },
-    { text: 'that belonged only to you.', hold: 5500 },
+    { text: `I wanted to do something small.`, hold: 2200 },
+    { text: `Something quiet.`, hold: 2400 },
+    { text: `Something that said —`, hold: 1900 },
+    { text: `without really saying it —`, hold: 2200 },
+    { text: `that you mattered.`, hold: 3200 },
+    { text: `That someone noticed.`, hold: 2200 },
+    { text: `That someone cared.`, hold: 5800 },
   ]);
   await goTo('sf', 1300);
   runFinal();
 }
 
 async function runFinal() {
-  setBrighten(0.6);
+  setBrighten(0.58);
   startFalling(900);
   pInt = 1.4;
 
@@ -96,15 +104,37 @@ async function runFinal() {
   await wait(500);
 
   await revealLines($('letter'), [
-    'There are thousands of people', 'we meet in life.', '',
-    'Most become memories.', '',
-    'A very few become', 'a quiet part of our heart.', '',
-    'I don’t know', 'what I am to you.', '',
-    'Maybe just another name.', 'Maybe just another moment.', '',
-    'But if one day', 'you ever remember me,', '',
-    'I hope you remember', 'that someone once sat down,',
-    'opened a blank page,', 'and built', 'a tiny little universe', 'just to make you smile.', '',
-    '🌸'
+    `I'm not sure what to call this.`,
+    ``,
+    `Not love, exactly.`,
+    `Not just a passing thought either.`,
+    ``,
+    `Something softer.`,
+    `Something harder to name.`,
+    ``,
+    `You crossed my mind`,
+    `in the quiet hours.`,
+    ``,
+    `And one day I thought —`,
+    ``,
+    `what if I built a small place,`,
+    `just for you?`,
+    ``,
+    `No promises.`,
+    `No expectations.`,
+    ``,
+    `Just something gentle.`,
+    `Made with care.`,
+    ``,
+    `And a quiet hope`,
+    `that somewhere`,
+    `in the middle of your day,`,
+    ``,
+    `this made you feel`,
+    `something small`,
+    `and good.`,
+    ``,
+    `🌸`,
   ], { stagger: 620, dur: 1100 });
 
   await wait(900);
@@ -112,6 +142,6 @@ async function runFinal() {
   await wait(1000);
   tw(800, eob, (t) => {
     $('mem-wrap').style.opacity = t;
-    $('mem-wrap').style.transform = `scale(${.85 + t * .15})`;
+    $('mem-wrap').style.transform = `scale(${0.85 + t * 0.15})`;
   });
 }
