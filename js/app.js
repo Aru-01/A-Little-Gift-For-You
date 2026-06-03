@@ -123,9 +123,9 @@ $('btn-mem').addEventListener('click', async (e) => {
   tw(900, eo3, (t) => $('finalMsg').style.opacity = t);
   await typeSequence($('finalMsg-text'), [
     { text: `Thank you`, hold: 1300 },
-    { text: `for visiting`, hold: 1300 },
-    { text: `this little world.`, hold: 2000 },
-    { text: `Goodbye... 🌸`, hold: 1500 },
+    { text: `for spending`, hold: 1300 },
+    { text: `a little moment here.`, hold: 2000 },
+    { text: `Take care pio... 🌸`, hold: 1500 },
   ], { cd: 64 });
 
   await wait(4500);

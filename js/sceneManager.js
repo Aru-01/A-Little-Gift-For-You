@@ -47,13 +47,16 @@ async function runS2() {
 async function runS3() {
   setBrighten(0.42);
   await typeSequence($('t3'), [
-    { text: `I don't know what I am to you.`, hold: 2800 },
-    { text: `Maybe nothing much.`, hold: 2500 },
-    { text: `Maybe just someone you pass by.`, hold: 3000 },
+
+    { text: `I don't know what place I have in your story.`, hold: 2800 },
+    { text: ``, hold: 500 },
+    { text: `Maybe only a small chapter.`, hold: 2500 },
+    { text: `Maybe only a passing page.`, hold: 3000 },
+    { text: ``, hold: 500 },
     { text: `But you...`, hold: 2400 },
-    { text: `became something I didn't plan for.`, hold: 3200 },
-    { text: `Quietly.`, hold: 1600 },
-    { text: `Without warning.`, hold: 5500 },
+    { text: `became one of those thoughts,`, hold: 3200 },
+    { text: `that stay with me.`, hold: 1600 },
+    { text: `long after the day is over.`, hold: 5500 },
   ]);
   await goTo('s4', 1100);
   runS4();
@@ -67,6 +70,7 @@ async function runS4() {
     { text: `Maybe you're not mine.`, hold: 2200 },
     { text: `Maybe you never will be.`, hold: 2600 },
     { text: `And that's okay.`, hold: 3500 },
+    { text: ``, hold: 500 },
     { text: `Not everything beautiful`, hold: 1600 },
     { text: `needs to stay forever.`, hold: 2200 },
     { text: `Some things just need`, hold: 1600 },
@@ -83,13 +87,15 @@ async function runS5() {
   bloomFlower5();
   await wait(1800);
   await typeSequence($('t5'), [
-    { text: `I wanted to do something small.`, hold: 2200 },
+    { text: `I wanted to make something small.`, hold: 2200 },
     { text: `Something quiet.`, hold: 2400 },
-    { text: `Something that said —`, hold: 1900 },
-    { text: `without really saying it —`, hold: 2200 },
-    { text: `that you mattered.`, hold: 3200 },
-    { text: `That someone noticed.`, hold: 2200 },
-    { text: `That someone cared.`, hold: 5800 },
+    { text: `A little place`, hold: 1900 },
+    { text: ``, hold: 500 },
+    { text: `where you could pause`, hold: 2200 },
+    { text: `for a moment...`, hold: 3200 },
+    { text: `and simply feel.`, hold: 2200 },
+    { text: ``, hold: 500 },
+    { text: `that your existence made the world a little softer.`, hold: 5800 },
   ]);
   await goTo('sf', 1300);
   runFinal();
@@ -104,35 +110,34 @@ async function runFinal() {
   await wait(500);
 
   await revealLines($('letter'), [
-    `I'm not sure what to call this.`,
+    `I don't really know what this is.`,
     ``,
-    `Not love, exactly.`,
-    `Not just a passing thought either.`,
+    `Maybe, 
+    it doesn't need a name.`,
     ``,
-    `Something softer.`,
-    `Something harder to name.`,
+    `Some people,`,
+    `simply appear`,
     ``,
-    `You crossed my mind`,
-    `in the quiet hours.`,
+    `and quietly become`,
+    `one of your
+    favorite thoughts.`,
     ``,
-    `And one day I thought —`,
+    `So I made
+    this little place.`,
     ``,
-    `what if I built a small place,`,
-    `just for you?`,
+    `Not for answers.`,
+    `Not for promises.`,
+    `Just to leave behind`,
     ``,
-    `No promises.`,
-    `No expectations.`,
-    ``,
-    `Just something gentle.`,
-    `Made with care.`,
-    ``,
+    `something soft.`,
+    `Something kind.`,
     `And a quiet hope`,
-    `that somewhere`,
-    `in the middle of your day,`,
     ``,
-    `this made you feel`,
-    `something small`,
-    `and good.`,
+    `that for one small moment,`,
+    `this made your day`,
+    ``,
+    `feel`,
+    `a little brighter.`,
     ``,
     `🌸`,
   ], { stagger: 620, dur: 1100 });
